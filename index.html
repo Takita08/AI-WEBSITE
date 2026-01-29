@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,9 @@
             --primary-color: #6366f1;
             --secondary-color: #8b5cf6;
             --accent-color: #ec4899;
+            --saffron: #ff9933;
+            --india-green: #138808;
+            --chakra-blue: #1a237e;
             --dark-bg: #0a0a0f;
             --darker-bg: #050508;
             --card-bg: #1a1a2e;
@@ -23,6 +27,7 @@
             --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --india-glow: linear-gradient(135deg, rgba(255, 153, 51, 0.7) 0%, rgba(255, 255, 255, 0.45) 45%, rgba(19, 136, 8, 0.65) 100%);
         }
 
         body {
@@ -31,6 +36,30 @@
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
+        }
+
+        /* Subtle Indic ambient background (rangoli + chakra hint) */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.55;
+            background:
+                radial-gradient(900px circle at 10% 0%, rgba(255, 153, 51, 0.10), transparent 55%),
+                radial-gradient(900px circle at 90% 20%, rgba(19, 136, 8, 0.09), transparent 58%),
+                radial-gradient(700px circle at 50% 85%, rgba(26, 35, 126, 0.08), transparent 55%),
+                /* rangoli-ish dots */
+                radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.10) 0 1px, transparent 2px),
+                radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.06) 0 1px, transparent 2px);
+            background-size:
+                auto,
+                auto,
+                auto,
+                34px 34px,
+                44px 44px;
+            mix-blend-mode: screen;
         }
 
         #particleCanvas {
@@ -84,6 +113,15 @@
 
         .logo-accent {
             color: var(--accent-color);
+        }
+
+        .logo::after {
+            content: ' • नमस्ते';
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-left: 0.35rem;
+            color: rgba(226, 232, 240, 0.75);
+            letter-spacing: 0.02em;
         }
 
         .nav-menu {
@@ -145,6 +183,20 @@
             margin: 0 auto;
         }
 
+        /* Tri-color light wash behind hero (very subtle) */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: -120px -60px;
+            z-index: -1;
+            background:
+                radial-gradient(700px circle at 20% 15%, rgba(255, 153, 51, 0.20), transparent 60%),
+                radial-gradient(700px circle at 80% 40%, rgba(19, 136, 8, 0.18), transparent 62%),
+                radial-gradient(600px circle at 55% 25%, rgba(26, 35, 126, 0.10), transparent 60%);
+            filter: blur(6px);
+            opacity: 0.7;
+        }
+
         .hero-content {
             flex: 1;
             max-width: 600px;
@@ -168,8 +220,15 @@
         }
 
         @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .hero-subtitle {
@@ -177,6 +236,16 @@
             color: var(--text-secondary);
             margin-bottom: 1rem;
             font-weight: 300;
+        }
+
+        .hero-subtitle .hi {
+            display: block;
+            margin-top: 0.15rem;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            color: rgba(226, 232, 240, 0.82);
+            font-weight: 300;
+            font-family: 'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', 'Inter', system-ui, sans-serif;
         }
 
         .hero-description {
@@ -193,37 +262,110 @@
         }
 
         .btn {
-            padding: 12px 32px;
+            padding: 14px 36px;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            z-index: -1;
+            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .btn:hover::before {
+            width: 100%;
         }
 
         .btn-primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-primary::before {
             background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: white;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+            transform: scale(1.05);
+            border-color: transparent;
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--text-primary);
-            border: 2px solid var(--primary-color);
+            color: var(--text-secondary);
+            border: 1px solid var(--text-secondary);
+        }
+
+        .btn-secondary::before {
+            background: var(--text-primary);
         }
 
         .btn-secondary:hover {
-            background: var(--primary-color);
-            transform: translateY(-2px);
+            color: var(--darker-bg);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+            border-color: transparent;
+        }
+
+        /* Cinematic Zoom Effect */
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease-out;
+            /* Smoother hover */
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+        .feature-card.activating {
+            z-index: 100;
+            animation: cinematic-zoom 1.2s forwards cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes cinematic-zoom {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                filter: brightness(1) blur(0);
+            }
+
+            40% {
+                transform: scale(0.97);
+                /* Slight anticipate */
+                opacity: 1;
+                filter: brightness(1);
+            }
+
+            100% {
+                transform: scale(4);
+                /* Subtle zoom, not warp speed */
+                opacity: 0;
+                filter: brightness(1.5) blur(20px);
+                /* Smokey fade */
+            }
         }
 
         /* Neural Network Visual */
@@ -252,12 +394,41 @@
             animation: pulse 2s ease-in-out infinite;
         }
 
-        .node:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
-        .node:nth-child(2) { top: 20%; right: 20%; animation-delay: 0.3s; }
-        .node:nth-child(3) { top: 50%; left: 10%; animation-delay: 0.6s; }
-        .node:nth-child(4) { top: 50%; right: 10%; animation-delay: 0.9s; }
-        .node:nth-child(5) { bottom: 20%; left: 30%; animation-delay: 1.2s; }
-        .node:nth-child(6) { bottom: 20%; right: 30%; animation-delay: 1.5s; }
+        .node:nth-child(1) {
+            top: 20%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .node:nth-child(2) {
+            top: 20%;
+            right: 20%;
+            animation-delay: 0.3s;
+        }
+
+        .node:nth-child(3) {
+            top: 50%;
+            left: 10%;
+            animation-delay: 0.6s;
+        }
+
+        .node:nth-child(4) {
+            top: 50%;
+            right: 10%;
+            animation-delay: 0.9s;
+        }
+
+        .node:nth-child(5) {
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 1.2s;
+        }
+
+        .node:nth-child(6) {
+            bottom: 20%;
+            right: 30%;
+            animation-delay: 1.5s;
+        }
 
         .connection {
             position: absolute;
@@ -289,13 +460,29 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
         }
 
         @keyframes flow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
         }
 
         /* Features Section */
@@ -331,6 +518,24 @@
             overflow: hidden;
         }
 
+        /* Thin “rangoli” gradient border glow on hover */
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 153, 51, 0.0), rgba(255, 153, 51, 0.35), rgba(255, 255, 255, 0.25), rgba(19, 136, 8, 0.35), rgba(255, 153, 51, 0.0));
+            -webkit-mask:
+                linear-gradient(#000 0 0) content-box,
+                linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
         .feature-card::before {
             content: '';
             position: absolute;
@@ -352,6 +557,10 @@
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
         }
 
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -360,8 +569,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .feature-card h3 {
@@ -525,6 +741,19 @@
             align-items: flex-start;
         }
 
+        .info-item {
+            padding: 0.8rem;
+            border-radius: 12px;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .info-item:hover {
+            transform: translateY(-3px);
+            background: rgba(15, 23, 42, 0.55);
+            border-color: rgba(255, 153, 51, 0.25);
+        }
+
         .info-icon {
             font-size: 2rem;
         }
@@ -536,6 +765,178 @@
 
         .info-item p {
             color: var(--text-secondary);
+        }
+
+        /* AI Helper Chat */
+        .chat-toggle {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 1100;
+            background: var(--gradient-1);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 0.85rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-toggle span.icon {
+            font-size: 1.2rem;
+        }
+
+        .chat-window {
+            position: fixed;
+            right: 24px;
+            bottom: 90px;
+            width: 340px;
+            max-width: calc(100% - 40px);
+            background: #05050a;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.75);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1100;
+        }
+
+        .chat-header {
+            padding: 0.9rem 1.1rem;
+            background: radial-gradient(circle at top left, #6366f1, #0b0b15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-title {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .chat-header-title strong {
+            font-size: 0.95rem;
+        }
+
+        .chat-header-title span {
+            font-size: 0.75rem;
+            color: rgba(226, 232, 240, 0.8);
+        }
+
+        .chat-close {
+            background: transparent;
+            border: none;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .chat-messages {
+            padding: 0.9rem 1rem;
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-message.assistant .chat-bubble {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+
+        .chat-message.user .chat-bubble {
+            background: var(--gradient-1);
+            border: none;
+        }
+
+        .chat-avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, #a855f7, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .chat-bubble {
+            padding: 0.6rem 0.8rem;
+            border-radius: 10px;
+            color: #e5e7eb;
+            max-width: 80%;
+            white-space: pre-wrap;
+        }
+
+        .chat-input {
+            padding: 0.6rem 0.8rem 0.7rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.5rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: transparent;
+            color: #e5e7eb;
+            font-size: 0.8rem;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.7);
+        }
+
+        .chat-send {
+            border-radius: 999px;
+            border: none;
+            padding: 0.45rem 0.7rem;
+            background: var(--gradient-1);
+            cursor: pointer;
+            color: white;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-status {
+            font-size: 0.7rem;
+            color: rgba(148, 163, 184, 0.9);
+            padding: 0 1rem 0.4rem;
+        }
+
+        .chat-status span.dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+            margin-right: 0.4rem;
         }
 
         /* Footer */
@@ -594,9 +995,10 @@
         }
     </style>
 </head>
+
 <body>
     <canvas id="particleCanvas"></canvas>
-    
+
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
@@ -621,11 +1023,15 @@
             <h1 class="glitch" data-text="AI NEXUS">
                 <span class="gradient-text">AI NEXUS</span>
             </h1>
-            <p class="hero-subtitle">Where Intelligence Meets Innovation</p>
-            <p class="hero-description">Experience the next generation of artificial intelligence. Transform your ideas into reality with cutting-edge AI technology.</p>
+            <p class="hero-subtitle">
+                Where Artificial Intelligence Meets Infinite Innovation
+            </p>
+            <p class="hero-description">Experience the next generation of artificial intelligence. Transform your
+                ambitious concepts into reality with our cutting-edge, proprietary AI infrastructure designed for the
+                future.</p>
             <div class="hero-buttons">
-                <button class="btn btn-primary">Get Started</button>
-                <button class="btn btn-secondary">Explore</button>
+                <button class="btn btn-primary" onclick="window.location.href='#features'">Get Started</button>
+                <button class="btn btn-secondary" onclick="window.location.href='#about'">Explore System</button>
             </div>
         </div>
         <div class="hero-visual">
@@ -647,35 +1053,69 @@
         <div class="container">
             <h2 class="section-title">Powerful Features</h2>
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" onclick="openFeature(this, 'neural-processing.html')">
                     <div class="feature-icon">🧠</div>
                     <h3>Neural Processing</h3>
-                    <p>Advanced neural networks that learn and adapt in real-time, delivering unprecedented accuracy and performance.</p>
+                    <p>Advanced neural networks that learn and adapt in real-time, delivering unprecedented accuracy and
+                        computational performance.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="openFeature(this, 'lightning-fast.html')">
                     <div class="feature-icon">⚡</div>
                     <h3>Lightning Fast</h3>
-                    <p>Process millions of operations per second with our optimized AI infrastructure built for speed.</p>
+                    <p>Execute millions of complex operations per nanosecond with our optimized, low-latency AI
+                        infrastructure.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="openFeature(this, 'secure-private.html')">
                     <div class="feature-icon">🔒</div>
                     <h3>Secure & Private</h3>
-                    <p>Enterprise-grade security ensuring your data remains protected with end-to-end encryption.</p>
+                    <p>Military-grade encryption and privacy-first architecture ensure your sensitive data remains
+                        exclusively yours.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="openFeature(this, 'global-scale.html')">
                     <div class="feature-icon">🌐</div>
                     <h3>Global Scale</h3>
-                    <p>Deploy AI solutions across the globe with our distributed cloud infrastructure.</p>
+                    <p>Seamlessly deploy AI solutions across a distributed worldwide network with instant localized
+                        caching.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="openFeature(this, 'precision-engine.html')">
                     <div class="feature-icon">🎯</div>
                     <h3>Precision Engine</h3>
-                    <p>Ultra-precise algorithms that deliver results with 99.9% accuracy across all use cases.</p>
+                    <p>Ultra-precise algorithmic models delivering deterministic results with 99.99% accuracy across
+                        diverse datasets.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="openFeature(this, 'future-ready.html')">
                     <div class="feature-icon">🚀</div>
                     <h3>Future Ready</h3>
-                    <p>Built on cutting-edge technology that evolves with the latest AI breakthroughs.</p>
+                    <p>Built on an adaptive architecture that autonomously evolves with the latest breakthroughs in AI
+                        research.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Tech Stack Section -->
+    <section class="tech-stack" style="padding: 100px 20px; background: rgba(0,0,0,0.2);">
+        <div class="container">
+            <h2 class="section-title">Technological Architecture</h2>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
+                <div
+                    style="padding: 2rem; background: rgba(255,255,255,0.03); border-radius: 12px; border-left: 3px solid var(--primary-color);">
+                    <h3 style="margin-bottom: 1rem; color: #fff;">Core Loop</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Powered by a custom-built Rust backend
+                        optimized for non-blocking I/O and maximal throughput.</p>
+                </div>
+                <div
+                    style="padding: 2rem; background: rgba(255,255,255,0.03); border-radius: 12px; border-left: 3px solid var(--accent-color);">
+                    <h3 style="margin-bottom: 1rem; color: #fff;">Quantum Edge</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Utilizing post-quantum cryptographic
+                        standards to future-proof all data transmissions.</p>
+                </div>
+                <div
+                    style="padding: 2rem; background: rgba(255,255,255,0.03); border-radius: 12px; border-left: 3px solid var(--secondary-color);">
+                    <h3 style="margin-bottom: 1rem; color: #fff;">Neural Fabric</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">A self-healing mesh network that
+                        redistributes computational loads dynamically in real-time.</p>
                 </div>
             </div>
         </div>
@@ -686,8 +1126,10 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2 class="section-title">About AI Nexus</h2>
-                    <p>AI Nexus represents the convergence of artificial intelligence and human creativity. We're building the future where AI seamlessly integrates into every aspect of our lives.</p>
-                    <p>Our platform combines state-of-the-art machine learning algorithms with intuitive interfaces, making advanced AI accessible to everyone.</p>
+                    <p>AI Nexus represents the convergence of artificial intelligence and human creativity. We're
+                        building the future where AI seamlessly integrates into every aspect of our lives.</p>
+                    <p>Our platform combines state-of-the-art machine learning algorithms with intuitive interfaces,
+                        making advanced AI accessible to everyone.</p>
                     <div class="stats">
                         <div class="stat">
                             <div class="stat-number" data-target="1000000">0</div>
@@ -705,11 +1147,17 @@
                 </div>
                 <div class="about-visual">
                     <div class="code-block">
-                        <div class="code-line"><span class="code-keyword">import</span> <span class="code-string">ai_nexus</span></div>
-                        <div class="code-line"><span class="code-keyword">from</span> <span class="code-string">future</span> <span class="code-keyword">import</span> <span class="code-string">possibilities</span></div>
+                        <div class="code-line"><span class="code-keyword">import</span> <span
+                                class="code-string">ai_nexus</span></div>
+                        <div class="code-line"><span class="code-keyword">from</span> <span
+                                class="code-string">future</span> <span class="code-keyword">import</span> <span
+                                class="code-string">possibilities</span></div>
                         <div class="code-line"></div>
-                        <div class="code-line"><span class="code-function">ai</span> = <span class="code-class">AI</span>()</div>
-                        <div class="code-line"><span class="code-function">ai</span>.<span class="code-method">transform</span>(<span class="code-string">"your_ideas"</span>)</div>
+                        <div class="code-line"><span class="code-function">ai</span> = <span
+                                class="code-class">AI</span>()</div>
+                        <div class="code-line"><span class="code-function">ai</span>.<span
+                                class="code-method">transform</span>(<span class="code-string">"your_ideas"</span>)
+                        </div>
                         <div class="code-line"><span class="code-comment"># The future is now</span></div>
                     </div>
                 </div>
@@ -765,6 +1213,38 @@
             <p>&copy; 2026 AI Nexus. Powered by Artificial Intelligence.</p>
         </div>
     </footer>
+
+    <!-- AI Helper Chat UI -->
+    <button class="chat-toggle" id="chatToggle">
+        <span class="icon">💬</span>
+        <span>Need AI help?</span>
+    </button>
+
+    <div class="chat-window" id="chatWindow" aria-label="AI Help Chat" aria-hidden="true">
+        <div class="chat-header">
+            <div class="chat-header-title">
+                <strong>AI Nexus Assistant</strong>
+                <span>Ask anything about this site</span>
+            </div>
+            <button class="chat-close" id="chatClose" aria-label="Close chat">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message assistant">
+                <div class="chat-avatar">AI</div>
+                <div class="chat-bubble">
+                    Hi! I'm your AI guide for AI Nexus. Ask me anything about the features, how to use this site, or any
+                    issues you're running into.
+                </div>
+            </div>
+        </div>
+        <div class="chat-status" id="chatStatus">
+            <span class="dot"></span>Online · powered by AI
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Describe your issue or ask a question..." autocomplete="off">
+            <button class="chat-send" id="chatSend" aria-label="Send message">➤</button>
+        </div>
+    </div>
 
     <script>
         // Particle Canvas Animation
@@ -835,12 +1315,12 @@
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             particles.forEach(particle => {
                 particle.update();
                 particle.draw();
             });
-            
+
             connectParticles();
             requestAnimationFrame(animateParticles);
         }
@@ -867,13 +1347,13 @@
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
-            
+
             if (currentScroll > 100) {
                 navbar.style.background = 'rgba(10, 10, 15, 0.95)';
             } else {
                 navbar.style.background = 'rgba(10, 10, 15, 0.8)';
             }
-            
+
             lastScroll = currentScroll;
         });
 
@@ -915,7 +1395,7 @@
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
-                    
+
                     // Animate counters when stats section is visible
                     if (entry.target.classList.contains('stat-number')) {
                         const target = parseFloat(entry.target.getAttribute('data-target'));
@@ -941,20 +1421,20 @@
         if (contactForm) {
             contactForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                
+
                 // Add a cool animation effect
                 const button = contactForm.querySelector('.btn-primary');
                 const originalText = button.textContent;
-                
+
                 button.textContent = 'Sending...';
                 button.style.opacity = '0.7';
                 button.disabled = true;
-                
+
                 // Simulate sending (replace with actual form handling)
                 setTimeout(() => {
                     button.textContent = 'Message Sent! ✓';
                     button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                    
+
                     setTimeout(() => {
                         button.textContent = originalText;
                         button.style.opacity = '1';
@@ -970,19 +1450,19 @@
         const glitchElement = document.querySelector('.glitch');
         if (glitchElement) {
             let glitchInterval;
-            
+
             function triggerGlitch() {
                 glitchElement.style.animation = 'none';
                 setTimeout(() => {
                     glitchElement.style.animation = '';
                 }, 100);
             }
-            
+
             // Trigger glitch on hover
             glitchElement.addEventListener('mouseenter', () => {
                 glitchInterval = setInterval(triggerGlitch, 200);
             });
-            
+
             glitchElement.addEventListener('mouseleave', () => {
                 clearInterval(glitchInterval);
             });
@@ -994,7 +1474,7 @@
             const text = heroSubtitle.textContent;
             heroSubtitle.textContent = '';
             let index = 0;
-            
+
             function typeText() {
                 if (index < text.length) {
                     heroSubtitle.textContent += text.charAt(index);
@@ -1002,7 +1482,7 @@
                     setTimeout(typeText, 50);
                 }
             }
-            
+
             setTimeout(typeText, 500);
         }
 
@@ -1026,6 +1506,106 @@
                 hero.style.opacity = 1 - scrolled / window.innerHeight;
             }
         });
+
+        // === AI Helper Chat Logic ===
+        const chatToggle = document.getElementById('chatToggle');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatClose = document.getElementById('chatClose');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatStatus = document.getElementById('chatStatus');
+
+        function toggleChat(open) {
+            const shouldOpen = typeof open === 'boolean' ? open : chatWindow.style.display !== 'flex';
+            chatWindow.style.display = shouldOpen ? 'flex' : 'none';
+            chatWindow.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+            if (shouldOpen) {
+                chatInput.focus();
+            }
+        }
+
+        function appendMessage(role, text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `chat-message ${role}`;
+
+            if (role === 'assistant') {
+                const avatar = document.createElement('div');
+                avatar.className = 'chat-avatar';
+                avatar.textContent = 'AI';
+                wrapper.appendChild(avatar);
+            }
+
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble';
+            bubble.textContent = text;
+
+            wrapper.appendChild(bubble);
+            chatMessages.appendChild(wrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            appendMessage('user', text);
+            chatInput.value = '';
+
+            const originalStatus = chatStatus.textContent;
+            chatStatus.innerHTML = '<span class="dot"></span>Thinking...';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error');
+                }
+
+                const data = await response.json();
+                const reply = data.reply || data.message || 'I had trouble understanding that, but the server responded.';
+                appendMessage('assistant', reply);
+            } catch (err) {
+                appendMessage('assistant', 'I could not reach the AI helper backend. Make sure the server is running and try again.');
+            } finally {
+                chatStatus.innerHTML = '<span class="dot"></span>Online · powered by AI';
+            }
+        }
+
+        if (chatToggle && chatWindow) {
+            chatToggle.addEventListener('click', () => toggleChat());
+        }
+        if (chatClose) {
+            chatClose.addEventListener('click', () => toggleChat(false));
+        }
+        if (chatSend) {
+            chatSend.addEventListener('click', sendChatMessage);
+        }
+        if (chatInput) {
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage();
+                }
+            });
+        }
+
+        // Feature Card Navigation
+        // Feature Card Navigation
+        function openFeature(card, url) {
+            // Add activating class to trigger CSS animation
+            card.classList.add('activating');
+
+            // Wait for animation to near completion then navigate (synced with 1.2s animation)
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000);
+        }
     </script>
 </body>
+
 </html>
